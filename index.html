@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>99TV Cricket Commentary</title>
+    <link rel="icon" type="image/x-icon" href="https://static.vecteezy.com/system/resources/previews/000/550/672/original/baseball-bat-vector.jpg">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5;
+            color: #333;
+        }
+
+        .header {
+            background-color: #004d00;
+            color: white;
+            padding: 15px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .header img {
+            position: absolute;
+            left: 20px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .navbar {
+            background-color: #ffffff;
+            padding: 10px 0;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid #ddd;
+        }
+
+        .navbar a {
+            color: #000;
+            text-decoration: none;
+            margin: 0 20px;
+            font-size: 18px;
+            transition: color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .navbar a:hover {
+            color: #007bff;
+        }
+
+        .section {
+            display: none;
+            padding: 30px;
+            margin: 40px auto;
+            width: 80%;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.5s ease-in-out;
+        }
+
+        .active {
+            display: block;
+        }
+
+        h2 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        p {
+            line-height: 1.6;
+        }
+
+        .scorecard-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .scorecard {
+            background-color: white;
+            border: 1px solid #ddd;
+            padding: 10px;
+            flex: 1;
+            box-sizing: border-box;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+            background-color: #f9f9f9;
+        }
+
+        th {
+            background-color: #e9ecef;
+        }
+
+        .out-status {
+            color: red;
+            font-weight: bold;
+        }
+
+        .commentary-container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-height: 400px;
+            overflow-y: auto;
+            margin: 0 auto;
+            width: 80%;
+        }
+
+        .commentary-log {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+
+        .commentary-log th, .commentary-log td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+            background-color: #f9f9f9;
+        }
+
+        .commentary-log th {
+            background-color: #e9ecef;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .schedule-container {
+            width: 90%;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .day-header {
+            background-color: #eee;
+            padding: 10px;
+            font-weight: bold;
+            font-size: 16px;
+            text-transform: uppercase;
+            color: #333;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .event {
+            padding: 20px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .event:last-child {
+            border-bottom: none;
+        }
+
+        .event-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .event-details div {
+            flex-basis: 45%;
+            margin-bottom: 10px;
+        }
+
+        .event-time {
+            text-align: right;
+            flex-basis: 20%;
+        }
+
+        .event-title {
+            font-weight: bold;
+            font-size: 18px;
+            color: #000;
+        }
+
+        .event-venue {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .time-info {
+            font-size: 14px;
+            color: #333;
+        }
+
+        @media screen and (max-width: 600px) {
+            .event-details {
+                flex-direction: column;
+                text-align: left;
+            }
+
+            .event-time {
+                text-align: left;
+                margin-top: 10px;
+            }
+        }
+.squad-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+.team-squad {
+    flex: 1;
+    margin: 10px;
+    padding: 20px;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.team-squad h3 {
+    margin-bottom: 10px;
+    color: #333;
+    font-size: 20px;
+}
+
+.team-squad ul {
+    list-style: none;
+    padding: 0;
+}
+
+.team-squad li {
+    padding: 8px 0;
+    border-bottom: 1px solid #ddd;
+    color: #555;
+    text-align: center; /* This will center the text */
+}
+
+.player-img {
+    display: block;
+    margin: 0 auto;
+}
+#teamScores {
+    margin-top: 20px;
+    font-size: 18px;
+}
+
+#teamScores p {
+    margin: 5px 0;
+}
+
+#teamScores strong {
+    font-weight: bold;
+}
+
+#matchResultContainer {
+    margin-top: 30px;
+    font-size: 22px;
+    font-weight: bold;
+    text-align: center;
+}
+
+#matchResult {
+    color: #ff0000; 
+}
+
+
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <h1>99TV Cricket Commentary</h1>
+        <img src="https://static.vecteezy.com/system/resources/previews/000/550/672/original/baseball-bat-vector.jpg"
+            width="70" height="70">
+    </div>
+    <div class="navbar">
+        <a onclick="showSection('matches')">Match Schedules</a>
+        <a onclick="showSection('squads')">Squads</a>
+        <a onclick="showSection('info')">Info</a>
+        <a onclick="showSection('scorecard')">Scorecard</a>
+        <a onclick="showSection('commentary')">Commentary</a>
+        <a onclick="showSection('about')">About</a>
+    </div>
+<div id="squads" class="section">
+    <h2>Squads</h2>
+    <div class="squad-container">
+        <div class="team-squad">
+            <h3>India Squad</h3>
+            <ul>
+                <li><img src="https://tse4.mm.bing.net/th?id=OIP.cCLiJxP05zdz3VQXAyRFngAAAA&pid=Api&P=0&h=180" alt="Player Image" class="player-img" width="100" height="100">Rohit Sharma</li>
+                <li><img src="https://tse4.mm.bing.net/th?id=OIP.mwjZLyhKmIy7QgquClCf0gAAAA&pid=Api&P=0&h=180" alt="Player Image" class="player-img" width="100" height="100">Virat Kohli</li>
+                <li><img src="https://tse3.mm.bing.net/th?id=OIP.XNy2efggqnRt6CmmL-aoWgHaEK&pid=Api&P=0&h=180" alt="Player Image" class="player-img" width="100" height="100">Surya Kumar Yadav</li>
+                <li><img src="https://tse4.mm.bing.net/th?id=OIP.wIELynPOS8IXJ9vOq5nafAHaHa&pid=Api&P=0&h=180" alt="Player Image" class="player-img" width="100" height="100">Rishabh Pant</li>
+                <li><img src="https://tse3.mm.bing.net/th?id=OIP.lKe3ySZdc6uhuk3zn_CGvwHaK2&pid=Api&P=0&h=180" alt="Player Image" class="player-img" width="100" height="100">Ravindra Jadeja</li>
+                <li><img src="https://1.bp.blogspot.com/-pSp3hLVoRXM/YJDqskK2C_I/AAAAAAAAAIc/UPSg-p3hVn00gKrI7xe7z88vIZQlbWtqwCLcBGAsYHQ/w1600/hardik%2B1-min.jpg" alt="Player Image" class="player-img" width="100" height="100">Hardik Pandya</li>
+                <li><img src="https://tse3.mm.bing.net/th?id=OIP.65Ad0jOWl6QfLr6F5PVmXgHaJC&pid=Api&P=0&h=180" alt="Player Image" class="player-img" width="100" height="100">Axar Patel</li>
+                <li><img src="https://tse3.mm.bing.net/th?id=OIP.VElKJ_c0qYZC6MBeSJQs5wHaGb&pid=Api&P=0&h=180" alt="Player Image" class="player-img" width="100" height="100">Shivam Dube</li>
+                <li><img src="https://tse3.mm.bing.net/th?id=OIP.-uHTULwKcNxH0mWAxBN5AQHaHa&pid=Api&P=0&h=180" alt="Player Image" class="player-img" width="100" height="100">Arshdeep Singh</li>
+                <li><img src="https://tse4.mm.bing.net/th?id=OIP.YA1FLcaiY2d_8XltM82cGQHaGc&pid=Api&P=0&h=180" alt="Player Image" class="player-img" width="100" height="100">Jasprit Bumrah</Button></li>
+                <li><img src="https://tse1.mm.bing.net/th?id=OIP.f3-upCt4RFnl-0sX4kTDnAHaHa&pid=Api&P=0&h=180" alt="Player Image" class="player-img" width="100" height="100">Mohammad Siraj</li>
+            </ul>
+        </div>
+        <div class="team-squad">
+            <h3>Pakistan Squad</h3>
+            <ul> 
+                    <li><img src="https://tse4.mm.bing.net/th?id=OIP.4YR2RbkYFEXyQ2QsV_SEkAAAAA&pid=Api&P=0&h=180" alt="Player Image" class="player-img" width="100" height="100">Babar Azam</li>
+                    <li><img src="https://tse1.mm.bing.net/th?id=OIP.Cg0CORSCKOTWqJBZMn1FBAHaI1&pid=Api&P=0&h=180" alt="Player Image" class="player-img" width="100" height="100">Mohammed Rizwan</li>
+                    <li><img src="https://tse3.mm.bing.net/th?id=OIP.ISOw_YLZiads69okIQsV7gHaJ2&pid=Api&P=0&h=180" alt="Player Image" class="player-img" width="100" height="100">Fakhar Zaman</li>
+                    <li><img src="https://img1.hscicdn.com/image/upload/f_auto,t_ds_w_1200/lsci/db/PICTURES/CMS/263600/263616.jpg" alt="Player Image" class="player-img" width="100" height="100">Shadab Khan</li>
+                    <li><img src="https://tse4.mm.bing.net/th?id=OIP.oE3FPXMqKFchBIB5BSqZrwHaI7&pid=Api&P=0&h=180" alt="Player Image" class="player-img" width="100" height="100">Shaheen Afridi</li>
+                    <li><img src="https://img1.hscicdn.com/image/upload/f_auto,t_ds_w_1200/lsci/db/PICTURES/CMS/312100/312183.png" alt="Player Image" class="player-img" width="100" height="100">Haris Rauf</li>
+                    <li><img src="https://superstarsbio.com/wp-content/uploads/2018/08/Mohammad-Nawaz-260x300.png" alt="Player Image" class="player-img" width="100" height="100">Mohammad Navaz</li>
+                    <li><img src="https://tse3.mm.bing.net/th?id=OIP.o7HiHxPeLLwqxwhEICLqQgHaFL&pid=Api&P=0&h=180" alt="Player Image" class="player-img" width="100" height="100">Imad Wasim</li>
+                    <li><img src="https://tse3.mm.bing.net/th?id=OIP.bNaJ3FwapSwmBxcMtnGPLQHaHJ&pid=Api&P=0&h=180" alt="Player Image" class="player-img" width="100" height="100">Hasan Ali</li>
+                    <li><img src="https://tse2.mm.bing.net/th?id=OIP.alFSzN8klhJC0759AgiNjwAAAA&pid=Api&P=0&h=180" alt="Player Image" class="player-img" width="100" height="100">Usama mir</Button></li>
+                    <li><img src="https://tse3.mm.bing.net/th?id=OIP.slamaIzL_J_x2wt5Ra-U7wHaKH&pid=Api&P=0&h=180" alt="Player Image" class="player-img" width="100" height="100">Imam-ul-Haq</li>
+            </ul>
+        </div>
+    </div>
+</div>
+    <div id="matches" class="section active">
+        <h2>Match Schedules</h2>
+        <div class="schedule-container">
+            <div class="day-header">
+                FRI, SEP 06 2024
+            </div>
+    
+            <div class="event">
+                <div class="event-details">
+                    <div>
+                        <div class="event-title">T20</div>
+                        <div class="event-venue">India vs Pakistan, 1st T20I</div>
+                        <div class="event-venue">New Madhavrao Scindia Cricket Stadium, Gwalior</div>
+                    </div>
+                    <div class="event-time">
+                        <div class="time-info">8:00 PM</div>
+                        <div class="time-info">02:30 PM GMT / 08:00 PM LOCAL</div>
+                    </div>
+                </div>
+            </div>
+            <div class="day-header">
+                MON, SEP 10 2024
+            </div>
+            <div class="event">
+                <div class="event-details">
+                    <div>
+                        <div class="event-title">T20</div>
+                        <div class="event-venue">India vs Bangladesh, 2nd T20I</div>
+                        <div class="event-venue">Arun Jaitley Stadium, Delhi</div>
+                    </div>
+                    <div class="event-time">
+                        <div class="time-info">8:00 PM</div>
+                        <div class="time-info">02:30 PM GMT / 08:00 PM LOCAL</div>
+                    </div>
+                </div>
+            </div>
+            <div class="day-header">
+                WED, SEP 12 2024
+            </div>
+            <div class="event">
+                <div class="event-details">
+                    <div>
+                        <div class="event-title">T20</div>
+                        <div class="event-venue">South Africa vs India, 1st T20I</div>
+                        <div class="event-venue">Kingsmead, Durban</div>
+                    </div>
+                    <div class="event-time">
+                        <div class="time-info">11:00 PM</div>
+                        <div class="time-info">05:30 PM GMT / 06:30 PM LOCAL</div>
+                    </div>
+                </div>
+            </div>
+      
+        </div>
+    </div>
+    <div id="info" class="section">
+        <h2>Info</h2>
+        <p><strong>Batting Team:</strong> <span id="battingTeam">India</span></p>
+        <p><strong>Bowling Team:</strong> <span id="bowlingTeam">Pakistan</span></p>
+        <p><strong>Overs:</strong> <span id="currentOver">0</span></p>
+        <p><strong>Wickets:</strong> <span id="wickets">0</span></p>
+        <p><strong>Run Rate:</strong> <span id="runRate">0.00</span></p>
+    </div>
+    <div id="scorecard" class="section">
+        <h2>Scorecard</h2>
+        <div class="scorecard-container">
+            <div class="scorecard">
+                <h3>Team A (India)</h3>
+                <p><strong>Team A(India):</strong> <span id="teamAScore">0</span> / <span id="teamAWickets">0</span></p>
+                <table id="teamAScorecardTable">
+                    <thead>
+                        <tr>
+                            <th>Batsman</th>
+                            <th>Runs</th>
+                            <th>Balls</th>
+                            <th>4s</th>
+                            <th>6s</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="teamAScorecardBody">
+                    </tbody>
+                </table>
+            </div>
+            <div class="scorecard">
+                <h3>Team B (Pakistan)</h3>
+                <p><strong>Team B (Pakistan): </strong><span id="teamBScore">0</span> / <span id="teamBWickets">0</span></p>
+                <table id="teamBScorecardTable">
+                    <thead>
+                        <tr>
+                            <th>Batsman</th>
+                            <th>Runs</th>
+                            <th>Balls</th>
+                            <th>4s</th>
+                            <th>6s</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="teamBScorecardBody">
+                    </tbody>
+                </table>
+                
+                <div id="matchResultContainer">
+                    <h2>Match Result</h2>
+                    <p id="matchResult"></p>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <div id="commentary" class="section">
+        <h2>Commentary</h2>
+        <div class="commentary-container">
+            <table id="commentaryTable">
+                <thead>
+                    <tr>
+                        <th>Over</th>
+                        <th>Ball</th>
+                        <th>Batsman</th>
+                        <th>Comment</th>
+                    </tr>
+                </thead>
+                <tbody id="commentaryLog">
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div id="about" class="section">
+        <h2>About Us</h2>
+        <p>This webpage provides real-time updates for cricket matches, including live commentary and scorecards.</p>
+    </div>
+
+    <script>
+        let overs = 1;
+        let ballsInCurrentOver = 0;
+        let currentOver = 0;
+        let matchPhase = 1;
+        let teamA = {
+            name: "India",
+            players: ["Rohit Sharma (c)", "Virat Kohli", "Suryakumar Yadav", "Rishabh Pant (WK)", "Ravindra Jadeja", "Hardik Pandya", "Axar Patel", "Shivam Dube", "Arshdeep Singh", "Jasprit Bumrah", "Mohammed Siraj"],
+            scores: Array(11).fill(0),
+            balls: Array(11).fill(0),
+            fours: Array(11).fill(0),
+            sixes: Array(11).fill(0),
+            statuses: Array(11).fill("Not Out"),
+            totalScore: 0,
+            wickets: 0,
+            ballsFaced: 0,
+            currentBatsman: 0
+        };
+
+        let teamB = {
+            name: "Pakistan",
+            players: ['Babar Azam (c)', 'Mohammad Rizwan', 'Fakhar Zaman', 'Shadab Khan', 'Shaheen Afridi',
+                      'Haris Rauf', 'Mohammad Nawaz', 'Imad Wasim', 'Hasan Ali', 'Usama Mir', 'Imam-ul-Haq'],
+                      
+            scores: Array(11).fill(0),
+            balls: Array(11).fill(0),
+            fours: Array(11).fill(0),
+            sixes: Array(11).fill(0),
+            statuses: Array(11).fill("Not Out"),
+            totalScore: 0,
+            wickets: 0,
+            ballsFaced: 0,
+            currentBatsman: 0
+        };
+
+        let currentTeam = teamA;
+        let bowlingTeam = teamB;
+        function showSection(sectionId) {
+            let sections = document.querySelectorAll('.section');
+            sections.forEach(section => section.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+        }
+        function generateRuns() {
+            const runOptions = [0, 1, 4, 6];
+            return runOptions[Math.floor(Math.random() * runOptions.length)];
+        }
+        function updateScorecardForTeamA() {
+            let scorecardBody = document.getElementById('teamAScorecardBody');
+            scorecardBody.innerHTML = ''; 
+            for (let i = 0; i < 11; i++) {
+                let playerName = teamA.players[i];
+                let playerScore = teamA.scores[i];
+                let playerBalls = teamA.balls[i];
+                let playerFours = teamA.fours[i];
+                let playerSixes = teamA.sixes[i];
+                let playerStatus = teamA.statuses[i];
+                let row = `<tr>
+                    <td>${playerName}</td>
+                    <td>${playerScore}</td>
+                    <td>${playerBalls}</td>
+                    <td>${playerFours}</td>
+                    <td>${playerSixes}</td>
+                    <td>${playerStatus}</td>
+                </tr>`;
+                scorecardBody.innerHTML += row;
+            }
+            
+        }
+        function updateScorecardForTeamB() {
+            let scorecardBody = document.getElementById('teamBScorecardBody');
+            scorecardBody.innerHTML = ''; 
+            for (let i = 0; i < 11; i++) {
+                let playerName = teamB.players[i];
+                let playerScore = teamB.scores[i];
+                let playerBalls = teamB.balls[i];
+                let playerFours = teamB.fours[i];
+                let playerSixes = teamB.sixes[i];
+                let playerStatus = teamB.statuses[i];
+                let row = `<tr>
+                    <td>${playerName}</td>
+                    <td>${playerScore}</td>
+                    <td>${playerBalls}</td>
+                    <td>${playerFours}</td>
+                    <td>${playerSixes}</td>
+                    <td>${playerStatus}</td>
+                </tr>`;
+                scorecardBody.innerHTML += row;
+            }
+        }
+        function updateCommentary(batsmanName, runs, overStr, ballCountInOver) {
+            let commentaryLog = document.getElementById('commentaryLog');
+            let runStr = runs === 0 ? '<span class="out-status">Out</span>' : `${runs} runs`;
+            let row = `<tr>
+                <td>${Math.floor(currentOver)}.${ballCountInOver + 1}</td>
+                <td>${ballCountInOver + 1}</td>
+                <td>${batsmanName}</td>
+                <td>${runStr}</td>
+            </tr>`;
+            commentaryLog.innerHTML += row;
+        }
+function updateMatch() {
+    if (ballsInCurrentOver >= 6 || currentTeam.wickets >= 10) {
+        currentOver++;
+        ballsInCurrentOver = 0;
+    }
+
+    if (currentOver >= overs) {
+        if (matchPhase === 1) {
+            currentTeam = teamB;  
+            bowlingTeam = teamA;
+            matchPhase = 2;
+            currentOver = 0;
+            ballsInCurrentOver = 0;
+        } else {
+            let matchResultElement = document.getElementById('matchResult');
+            if (teamB.totalScore > teamA.totalScore) {
+                matchResultElement.innerHTML = 'Team B (Pakistan) Wins!';
+            } else if (teamB.totalScore < teamA.totalScore) {
+                matchResultElement.innerHTML = 'Team A (India) Wins!';
+            } else {
+                matchResultElement.innerHTML = 'Match Drawn!';
+            }
+            return; 
+        }
+    }
+
+    let batsmanIndex = currentTeam.currentBatsman;
+    let runs = generateRuns();
+    let batsmanName = currentTeam.players[batsmanIndex];
+    currentTeam.scores[batsmanIndex] += runs;
+    currentTeam.balls[batsmanIndex]++;
+    if (runs === 4) currentTeam.fours[batsmanIndex]++;
+    if (runs === 6) currentTeam.sixes[batsmanIndex]++;
+    currentTeam.totalScore += runs;
+
+    if (runs === 0) {
+        currentTeam.statuses[batsmanIndex] = 'Out';
+        currentTeam.wickets++;
+        currentTeam.currentBatsman++;
+    }
+
+    let overStr = Math.floor(currentOver) + '.' + (ballsInCurrentOver + 1);
+    let runRate = (currentTeam.totalScore / currentTeam.ballsFaced) * 6;
+
+    document.getElementById('battingTeam').innerHTML = matchPhase === 1 ? 'India' : 'Pakistan';
+    document.getElementById('bowlingTeam').innerHTML = matchPhase === 1 ? 'Pakistan' : 'India';
+    document.getElementById('currentOver').innerHTML = overStr;
+    document.getElementById('wickets').innerHTML = currentTeam.wickets;
+    document.getElementById('runRate').innerHTML = runRate.toFixed(2);
+    document.getElementById('teamAScore').innerHTML = teamA.totalScore;
+    document.getElementById('teamAWickets').innerHTML = teamA.wickets;
+    document.getElementById('teamBScore').innerHTML = teamB.totalScore;
+    document.getElementById('teamBWickets').innerHTML = teamB.wickets;
+
+    updateScorecardForTeamA();
+    updateScorecardForTeamB();
+    updateCommentary(batsmanName, runs, overStr, ballsInCurrentOver);
+
+    ballsInCurrentOver++;
+    currentTeam.ballsFaced++;
+}
+setInterval(updateMatch, 5000);
+
+    </script>
+</body>
+<footer style="text-align: center; padding: 20px; background-color: #f1f1f1; font-family: Arial, sans-serif;">
+    <p>III AIML SECTION B</p>
+    <p>221FA18095, 221FA18130, 221FA18141, 221FA18171</p>
+    <p>&copy; 2024 Vignan University. All rights reserved.</p>
+</footer>
+
+</footer>
+</html>
